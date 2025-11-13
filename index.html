@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPL Auction Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+    <style>
+        /* CSS STYLES (Kept as is for styling, focusing on JS fix) */
+        :root {
+            --primary-blue: #1E40AF;
+            --secondary-orange: #FF6B00;
+            --accent-purple: #7C3AED;
+            --bg-gradient-start: #0F172A;
+            --bg-gradient-end: #1E293B;
+            --card-bg: #FFFFFF;
+            --text-dark: #1F2937;
+            --text-light: #6B7280;
+            --success-green: #10B981;
+            --error-red: #EF4444;
+            --border-color: #E5E7EB;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+            --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(255, 107, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(30, 64, 175, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(124, 58, 237, 0.1) 0%, transparent 50%);
+            z-index: 0;
+            animation: backgroundShift 20s ease infinite;
+        }
+
+        @keyframes backgroundShift {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1E40AF 0%, #7C3AED 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            border-radius: 20px 20px 0 0;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            overflow: hidden;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: headerGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes headerGlow {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(-20px, -20px);
+            }
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: titlePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes titlePulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+        header h1 i {
+            color: var(--secondary-orange);
+            animation: rotateBall 3s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes rotateBall {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .view-btn-container {
+            margin-top: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .event-banner {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .event-banner p {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .form-container,
+        .data-sheet-container {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: var(--shadow-xl);
+            animation: fadeInUp 0.8s ease-out 0.5s both;
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border-color);
+            animation: fadeInUp 0.6s ease-out both;
+            animation-delay: calc(var(--section-index) * 0.1s);
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+        }
+
+        .section-title i {
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.6rem;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            animation: slideIn 0.5s ease-out both;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #F9FAFB;
+        }
+
+        input:hover,
+        select:hover {
+            border-color: var(--primary-blue);
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .error {
+            color: var(--error-red);
+            font-size: 0.85rem;
+            margin-top: 6px;
+            display: none;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .file-upload input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 30px;
+            background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
+            border: 3px dashed var(--border-color);
+            border-radius: 16px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .file-upload-label:hover {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F9FAFB 100%);
+            border-color: var(--accent-purple);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .file-upload-label i {
+            font-size: 2.5rem;
+            color: var(--accent-purple);
+            display: block;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .file-preview {
+            margin-top: 15px;
+            display: none;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #F9FAFB;
+            border-radius: 12px;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .file-preview img {
+            max-width: 120px;
+            max-height: 120px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary-orange) 0%, #FF8533 100%);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-info:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-green) 0%, #059669 100%);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .member-container {
+            background: linear-gradient(135deg, #F9FAFB 0%, #FFFFFF 100%);
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            position: relative;
+            border: 2px solid var(--border-color);
+            animation: scaleIn 0.5s ease both;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .member-container:hover {
+            border-color: var(--accent-purple);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .member-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .member-header h3 {
+            color: var(--primary-blue);
+            font-size: 1.3rem;
+        }
+
+        .remove-member {
+            background: linear-gradient(135deg, var(--error-red) 0%, #DC2626 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .remove-member:hover {
+            transform: rotate(90deg) scale(1.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        .payment-section {
+            background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            border: 2px solid #BAE6FD;
+        }
+
+        .payment-info {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 25px;
+        }
+
+        .qr-code {
+            width: 180px;
+            height: 180px;
+            background: white;
+            border: 3px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .qr-code i {
+            color: var(--accent-purple);
+        }
+
+        .payment-details {
+            flex: 1;
+        }
+
+        .payment-details h3 {
+            color: var(--primary-blue);
+            margin-bottom: 12px;
+            font-size: 1.5rem;
+        }
+
+        .payment-details p {
+            margin-bottom: 8px;
+            color: var(--text-light);
+        }
+
+        .success-container {
+            display: none;
+            text-align: center;
+            padding: 60px 40px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-xl);
+            animation: zoomIn 0.6s ease;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .success-icon {
+            font-size: 5rem;
+            color: var(--success-green);
+            margin-bottom: 25px;
+            animation: successBounce 0.8s ease;
+        }
+
+        @keyframes successBounce {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            25% {
+                transform: scale(0.9);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            75% {
+                transform: scale(0.95);
+            }
+        }
+
+        .success-container h2 {
+            font-size: 2.2rem;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+        }
+
+        .registration-id {
+            background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            border: 2px dashed var(--primary-blue);
+        }
+
+        .copy-btn {
+            background: var(--secondary-orange);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #E55A00;
+            transform: scale(1.05);
+        }
+
+        .team-summary {
+            background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
+            padding: 30px;
+            border-radius: 16px;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .team-summary h3 {
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .summary-item {
+            display: flex;
+            margin-bottom: 12px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .summary-label {
+            font-weight: bold;
+            width: 150px;
+            color: var(--text-dark);
+        }
+
+        .event-details {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+
+        .event-details p {
+            margin: 8px 0;
+            font-weight: 500;
+            color: #92400E;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 35px;
+        }
+
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, var(--success-green) 0%, #059669 100%);
+            color: white;
+            padding: 18px 24px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-xl);
+            display: none;
+            z-index: 1001;
+            animation: slideInRight 0.5s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Data Sheet Table Styles */
+        .data-sheet-container {
+            display: none;
+            overflow-x: auto;
+            padding: 40px 20px;
+        }
+
+        .data-sheet-container h2 {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .registration-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 800px;
+        }
+
+        .registration-table thead th {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 15px 10px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .registration-table thead th:first-child {
+            border-top-left-radius: 12px;
+        }
+
+        .registration-table thead th:last-child {
+            border-top-right-radius: 12px;
+        }
+
+        .registration-table tbody td {
+            padding: 12px 10px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .registration-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .registration-table tbody tr:nth-child(even) {
+            background-color: #F9FAFB;
+        }
+
+        .registration-table tbody tr:hover {
+            background-color: #EBF8FF;
+            cursor: pointer;
+            transform: scale(1.005);
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .empty-data-message {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2rem;
+            color: var(--text-light);
+        }
+
+        /* Smooth scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-purple), var(--secondary-orange));
+            transform-origin: left;
+            transform: scaleX(0);
+            z-index: 9999;
+            transition: transform 0.1s ease;
+        }
+
+        /* Add stagger animation delays */
+        .form-section:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .form-section:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .form-section:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .form-section:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 10px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .form-container,
+            .data-sheet-container {
+                padding: 25px 20px;
+            }
+
+            .payment-info {
+                flex-direction: column;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-baseball-ball"></i> IPL AUCTION PORTAL</h1>
+                <div class="view-btn-container">
+                    <button type="button" class="btn btn-info" id="viewDataBtn">
+                        <i class="fas fa-table"></i> View Registrations
+                    </button>
+                </div>
+            </div>
+            <div class="event-banner">
+                <p><i class="fas fa-calendar-alt"></i> 22nd November | Saturday | 6:00 PM | MET IOT, 6th Floor Seminar
+                    Hall</p>
+            </div>
+        </header>
+
+        <div class="form-container" id="registrationForm">
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-users"></i> Team Information</h2>
+                <div class="form-group">
+                    <label for="teamName">Team Name *</label>
+                    <input type="text" id="teamName" name="teamName" required placeholder="Enter your team name">
+                    <div class="error" id="teamNameError">Team name must be between 3-50 characters</div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-user-tie"></i> Team Lead (Member 1)</h2>
+                <div class="form-group">
+                    <label for="leadName">Name *</label>
+                    <input type="text" id="leadName" name="leadName" required placeholder="Enter full name">
+                    <div class="error" id="leadNameError">Please enter a valid name</div>
+                </div>
+                <div class="form-group">
+                    <label for="leadBranch">Branch *</label>
+                    <select id="leadBranch" name="leadBranch" required>
+                        <option value="">Select Branch</option>
+                        <option value="CSE">CSE</option>
+                        <option value="ECE">ECE</option>
+                        <option value="ME">ME</option>
+                        <option value="CE">CE</option>
+                        <option value="EE">EE</option>
+                        <option value="Biotech">Biotech</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <div class="error" id="leadBranchError">Please select a branch</div>
+                </div>
+                <div class="form-group">
+                    <label for="leadCollege">College/University Name *</label>
+                    <input type="text" id="leadCollege" name="leadCollege" required placeholder="Enter college name">
+                    <div class="error" id="leadCollegeError">Please enter college name</div>
+                </div>
+                <div class="form-group">
+                    <label for="leadYear">Year of Study *</label>
+                    <select id="leadYear" name="leadYear" required>
+                        <option value="">Select Year</option>
+                        <option value="1st">1st</option>
+                        <option value="2nd">2nd</option>
+                        <option value="3rd">3rd</option>
+                        <option value="4th">4th</option>
+                    </select>
+                    <div class="error" id="leadYearError">Please select your year</div>
+                </div>
+                <div class="form-group">
+                    <label for="leadContact">Contact Number *</label>
+                    <input type="tel" id="leadContact" name="leadContact" required placeholder="10-digit mobile number">
+                    <div class="error" id="leadContactError">Enter a valid 10-digit phone number</div>
+                </div>
+                <div class="form-group">
+                    <label for="leadEmail">Email ID *</label>
+                    <input type="email" id="leadEmail" name="leadEmail" required placeholder="your.email@example.com">
+                    <div class="error" id="leadEmailError">Please enter a valid email address</div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-user-plus"></i> Additional Team Members</h2>
+                <p style="color: var(--text-light); margin-bottom: 20px;">
+                    <i class="fas fa-info-circle"></i> You can add up to **3 more members** (Total: 4 members including
+                    team lead)
+                </p>
+                <div id="additionalMembers"></div>
+                <button type="button" class="btn btn-secondary" id="addMemberBtn" style="margin-top: 10px;">
+                    <i class="fas fa-plus"></i> Add Member
+                </button>
+                <div class="error" id="memberLimitError">Maximum limit reached! You can only have 4 members including
+                    team lead.</div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-credit-card"></i> Payment & Proof</h2>
+                <div class="payment-section">
+                    <div class="payment-info">
+                        <div class="qr-code">
+                            <i class="fas fa-qrcode fa-4x"></i>
+                        </div>
+                        <div class="payment-details">
+                            <h3>Registration Fee: ₹300</h3>
+                            <p><i class="fas fa-info-circle"></i> Scan the QR code to make the payment</p>
+                            <p><i class="fas fa-clock"></i> Payment will be confirmed within 24 hours</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="paymentScreenshot">Payment Screenshot *</label>
+                        <div class="file-upload">
+                            <input type="file" id="paymentScreenshot" name="paymentScreenshot"
+                                accept=".jpg,.jpeg,.png,.pdf">
+                            <label for="paymentScreenshot" class="file-upload-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <div>Choose file or drag and drop</div>
+                                <small>JPG, PNG or PDF (Max 5MB)</small>
+                            </label>
+                        </div>
+                        <div class="file-preview" id="filePreview">
+                            <img id="previewImage" src="" alt="Preview">
+                            <span id="fileName"></span>
+                        </div>
+                        <div class="error" id="paymentScreenshotError">File is required</div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary btn-block" id="submitBtn">
+                <i class="fas fa-gavel"></i> Submit Registration
+            </button>
+        </div>
+
+        <div class="success-container" id="successContainer">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Registration Successful!</h2>
+            <p>Your team has been registered for the IPL Auction event</p>
+
+            <div class="registration-id" id="registrationId">
+                IPL-TEAM-001
+                <button class="copy-btn" id="copyBtn">Copy</button>
+            </div>
+
+            <div class="team-summary" id="teamSummary">
+                <h3>Team Summary</h3>
+                <div id="summaryContent"></div>
+            </div>
+
+            <div class="event-details">
+                <p><i class="fas fa-calendar-alt"></i> 22nd Nov | Saturday | 6:00 PM</p>
+                <p><i class="fas fa-map-marker-alt"></i> MET IOT, 6th Floor Seminar Hall</p>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-success" id="downloadBtn">
+                    <i class="fas fa-download"></i> Download Confirmation
+                </button>
+                <button class="btn btn-outline" id="backToHomeBtn">
+                    <i class="fas fa-home"></i> New Registration
+                </button>
+            </div>
+        </div>
+
+        <div class="data-sheet-container" id="dataSheetContainer">
+            <h2 class="section-title"><i class="fas fa-clipboard-list"></i> Registered Teams Data Sheet</h2>
+            <div id="dataSheetContent">
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-outline" id="backToFormBtn">
+                    <i class="fas fa-arrow-left"></i> Back to Form
+                </button>
+            </div>
+        </div>
+        <div class="detail-view-container" id="detailViewContainer" style="display: none;">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> Team Details: <span id="detailTeamName"></span>
+            </h2>
+            <div class="team-summary" id="detailContent">
+            </div>
+            <div class="payment-summary">
+                <h3 style="color: var(--secondary-orange);"><i class="fas fa-file-invoice"></i> Payment Proof</h3>
+                <p>File Name: <span id="detailSSFileName" style="font-weight: 600;">N/A</span></p>
+                <div class="payment-summary">
+                    <h3 style="color: var(--secondary-orange);"><i class="fas fa-file-invoice"></i> Payment Proof</h3>
+                    <p>File Name: <span id="detailSSFileName" style="font-weight: 600;">N/A</span></p>
+
+                    <div id="paymentProofContainer" style="margin-top: 10px; text-align: center;">
+                    </div>
+
+                    <p style="color: var(--error-red); margin-top: 10px;"><i class="fas fa-exclamation-triangle"></i>
+                        Note:
+                        Since the screenshot file is not stored in the browser, only the filename is displayed here.</p>
+                </div>
+                <p style="color: var(--error-red); margin-top: 10px;"><i class="fas fa-exclamation-triangle"></i> Note:
+                    Since the screenshot file is not stored in the browser, only the filename is displayed here.</p>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-outline" id="backToDataSheetBtn">
+                    <i class="fas fa-arrow-left"></i> Back to Data Sheet
+                </button>
+            </div>
+        </div>
+
+        <style>
+            /* Add to your existing <style> block */
+            .detail-view-container {
+                background: var(--card-bg);
+                padding: 40px;
+                border-radius: 0 0 20px 20px;
+                box-shadow: var(--shadow-xl);
+                animation: fadeInUp 0.8s ease-out 0.5s both;
+            }
+
+            .payment-summary {
+                margin-top: 30px;
+                padding: 20px;
+                border: 1px solid var(--border-color);
+                border-radius: 12px;
+                background: #FFFBEA;
+            }
+        </style>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+        </div>
+
+        <div class="toast" id="toast">
+            <i class="fas fa-check-circle"></i> Registration ID copied to clipboard!
+        </div>
+    </div>
+
+    // --- Start of UPDATED SCRIPT ---
+<script>
+    // Smooth scroll indicator 
+    window.addEventListener('scroll', () => {
+        const scrollIndicator = document.getElementById('scrollIndicator');
+        const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (window.scrollY / windowHeight);
+        scrollIndicator.style.transform = `scaleX(${scrolled})`;
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // DOM Elements
+        const registrationForm = document.getElementById('registrationForm');
+        const successContainer = document.getElementById('successContainer');
+        const dataSheetContainer = document.getElementById('dataSheetContainer');
+        const detailViewContainer = document.getElementById('detailViewContainer'); 
+        const dataSheetContent = document.getElementById('dataSheetContent');
+        const addMemberBtn = document.getElementById('addMemberBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const viewDataBtn = document.getElementById('viewDataBtn');
+        const backToFormBtn = document.getElementById('backToFormBtn');
+        const backToDataSheetBtn = document.getElementById('backToDataSheetBtn');
+        const paymentScreenshot = document.getElementById('paymentScreenshot');
+        const filePreview = document.getElementById('filePreview');
+        const previewImage = document.getElementById('previewImage');
+        const fileName = document.getElementById('fileName');
+        const loading = document.getElementById('loading');
+        const toast = document.getElementById('toast');
+        const backToHomeBtn = document.getElementById('backToHomeBtn');
+        const additionalMembers = document.getElementById('additionalMembers');
+        const paymentErrorDiv = document.getElementById('paymentScreenshotError'); // ✅ Fetched error div
+
+        // State
+        let memberCount = 0;
+        const maxMembers = 3;
+        let registrationId = '';
+        let formData = {};
+        let uploadedPaymentProof = {}; // ✅ NEW STATE: Temporary file storage for current session
+        
+        // --- Validation Helper Functions (UNCHANGED) ---
+        function validateInput(id, regex, errorMsg) {
+            const input = document.getElementById(id);
+            const error = document.getElementById(id + 'Error');
+            if (!input || !error) return true;
+            const value = input.value.trim();
+            if (value === '' || (regex && !regex.test(value))) {
+                error.textContent = errorMsg || 'This field is required.';
+                error.style.display = 'block';
+                return false;
+            } else {
+                error.style.display = 'none';
+                return true;
+            }
+        }
+        function validateSelect(id, errorMsg) {
+            const select = document.getElementById(id);
+            const error = document.getElementById(id + 'Error');
+            if (!select || !error) return true;
+            if (select.value === '') {
+                error.textContent = errorMsg || 'Please select an option.';
+                error.style.display = 'block';
+                return false;
+            } else {
+                error.style.display = 'none';
+                return true;
+            }
+        }
+        
+        // --- Utility Functions for View Toggling (UNCHANGED) ---
+        function hideAllContainers() {
+            registrationForm.style.display = 'none';
+            successContainer.style.display = 'none';
+            dataSheetContainer.style.display = 'none';
+            detailViewContainer.style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showForm() {
+            hideAllContainers();
+            registrationForm.style.display = 'block';
+        }
+
+        function showSuccessPage() {
+            hideAllContainers();
+            
+            // ... (Your original success page rendering logic) ...
+            document.getElementById('registrationId').innerHTML = `
+                ${registrationId}
+                <button class="copy-btn" id="copyBtn">Copy</button>
+            `;
+            
+            let summaryHTML = `
+                <div class="summary-item">
+                    <div class="summary-label">Team Name:</div>
+                    <div>${formData.teamName}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Team Lead:</div>
+                    <div>${formData.teamLead.name}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Total Members:</div>
+                    <div>${1 + formData.additionalMembers.length}</div>
+                </div>
+            `;
+            
+            if (formData.additionalMembers.length > 0) {
+                summaryHTML += '<div class="summary-item"><div class="summary-label">Team Members:</div><div>';
+                formData.additionalMembers.forEach((member, index) => {
+                    summaryHTML += `${member.name}${index < formData.additionalMembers.length - 1 ? ', ' : ''}`;
+                });
+                summaryHTML += '</div></div>';
+            }
+            
+            document.getElementById('summaryContent').innerHTML = summaryHTML;
+            
+            successContainer.style.display = 'block';
+            
+            document.getElementById('copyBtn').addEventListener('click', function() {
+                navigator.clipboard.writeText(registrationId).then(function() {
+                    toast.style.display = 'block';
+                    setTimeout(function() {
+                        toast.style.display = 'none';
+                    }, 3000);
+                });
+            });
+            
+            document.getElementById('downloadBtn').addEventListener('click', function() {
+                const element = document.createElement('a');
+                const fileContent = `
+Registration ID: ${registrationId}
+Team Name: ${formData.teamName}
+Team Lead: ${formData.teamLead.name}
+Total Members: ${1 + formData.additionalMembers.length}
+Additional Members: ${formData.additionalMembers.map(m => m.name).join(', ')}
+Registration Date: ${new Date().toLocaleString()}
+`;
+                const file = new Blob([fileContent], { type: 'text/plain' });
+                element.href = URL.createObjectURL(file);
+                element.download = `${registrationId}_confirmation.txt`;
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+            });
+            
+            backToHomeBtn.addEventListener('click', function() {
+                window.location.reload();
+            });
+        }
+        
+        // --- Show Team Details (Updated to fetch from MongoDB) ---
+        async function showTeamDetails(teamId) {
+            hideAllContainers();
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/registrations');
+                const registrations = await response.json();
+                const team = registrations.find(reg => reg.id === teamId);
+                
+                if (!team) {
+                    alert('Team not found!');
+                    renderDataSheet();
+                    return;
+                }
+
+                document.getElementById('detailTeamName').textContent = team.teamName;
+                document.getElementById('detailSSFileName').textContent = team.paymentScreenshot?.filename || 'N/A';
+                
+                const proofContainer = document.getElementById('paymentProofContainer');
+                const file = uploadedPaymentProof[teamId]; 
+
+                // ✅ SS PREVIEW LOGIC - Try local file first, then fetch from server
+                if (file) {
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            proofContainer.innerHTML = `<img src="${e.target.result}" alt="Payment Screenshot Preview" style="max-width: 100%; height: auto; border-radius: 8px; margin-top: 15px; border: 2px solid var(--success-green);">`;
+                        };
+                        reader.readAsDataURL(file);
+                    } else if (file.type === 'application/pdf') {
+                         proofContainer.innerHTML = `<p style="color: var(--primary-blue); font-weight: 600; margin-top: 15px; text-align: left;"><i class="fas fa-file-pdf"></i> PDF File uploaded: ${file.name}. Preview not supported here.</p>`;
+                    }
+                } else if (team.paymentScreenshot) {
+                    // Fetch from server
+                    const screenshotUrl = `http://localhost:3000/api/registrations/${teamId}/screenshot`;
+                    if (team.paymentScreenshot.contentType.startsWith('image/')) {
+                        proofContainer.innerHTML = `<img src="${screenshotUrl}" alt="Payment Screenshot Preview" style="max-width: 100%; height: auto; border-radius: 8px; margin-top: 15px; border: 2px solid var(--success-green);">`;
+                    } else {
+                        proofContainer.innerHTML = `<p style="color: var(--primary-blue); font-weight: 600; margin-top: 15px; text-align: left;"><i class="fas fa-file-pdf"></i> PDF File: ${team.paymentScreenshot.filename}</p>`;
+                    }
+                } else {
+                    proofContainer.innerHTML = `<p style="color: var(--error-red); margin-top: 15px;">No payment proof found.</p>`;
+                }
+            } catch (error) {
+                alert('Error loading team details: ' + error.message);
+                renderDataSheet();
+                return;
+            }
+            
+            let detailHTML = '';
+            // Team Lead Details
+            detailHTML += `<div class="team-summary"><h3>Team Lead: ${team.teamLead.name}</h3>`;
+            detailHTML += `<div class="summary-item"><div class="summary-label">Contact:</div><div>${team.teamLead.contact}</div></div>`;
+            detailHTML += `<div class="summary-item"><div class="summary-label">Email:</div><div>${team.teamLead.email}</div></div>`;
+            detailHTML += `<div class="summary-item"><div class="summary-label">College:</div><div>${team.teamLead.college}</div></div>`;
+            detailHTML += `<div class="summary-item"><div class="summary-label">Branch/Year:</div><div>${team.teamLead.branch}, ${team.teamLead.year}</div></div>`;
+            detailHTML += '</div>';
+
+            // Additional Members Details
+            if (team.additionalMembers.length > 0) {
+                team.additionalMembers.forEach((member, index) => {
+                    detailHTML += `<div class="team-summary" style="margin-top: 20px;"><h3>Member ${index + 2}: ${member.name}</h3>`;
+                    detailHTML += `<div class="summary-item"><div class="summary-label">Contact:</div><div>${member.contact}</div></div>`;
+                    detailHTML += `<div class="summary-item"><div class="summary-label">Email:</div><div>${member.email}</div></div>`;
+                    detailHTML += `<div class="summary-item"><div class="summary-label">College:</div><div>${member.college}</div></div>`;
+                    detailHTML += `<div class="summary-item"><div class="summary-label">Branch/Year:</div><div>${member.branch}, ${member.year}</div></div>`;
+                    detailHTML += '</div>';
+                });
+            } else {
+                 detailHTML += `<p style="color: var(--text-light); text-align: center; padding: 15px;">No additional members registered.</p>`;
+            }
+
+            document.getElementById('detailContent').innerHTML = detailHTML;
+            detailViewContainer.style.display = 'block';
+        }
+        
+        // --- Render Data Sheet (Updated to fetch from MongoDB) ---
+        async function renderDataSheet() {
+            hideAllContainers();
+
+            try {
+                const response = await fetch('http://localhost:3000/api/registrations');
+                const registrations = await response.json();
+
+                if (registrations.length === 0) {
+                    dataSheetContent.innerHTML = `
+                        <div class="empty-data-message">
+                            <i class="fas fa-exclamation-circle"></i> No teams have registered yet.
+                        </div>
+                    `;
+                } else {
+                    let tableHTML = `
+                        <table class="registration-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Team Name</th>
+                                    <th>Lead Name</th>
+                                    <th>Total Members</th>
+                                    <th>Lead Contact</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${registrations.map(reg => `
+                                    <tr data-team-id="${reg.id}">
+                                        <td>${reg.id}</td>
+                                        <td>${reg.teamName}</td>
+                                        <td>${reg.teamLead.name}</td>
+                                        <td>${1 + reg.additionalMembers.length}</td>
+                                        <td>${reg.teamLead.contact}</td>
+                                        <td>${new Date(reg.registrationDate).toLocaleDateString()}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                    dataSheetContent.innerHTML = tableHTML;
+
+                    // Add event listeners to table rows
+                    dataSheetContent.querySelectorAll('tr[data-team-id]').forEach(row => {
+                        row.addEventListener('click', function () {
+                            const teamId = this.getAttribute('data-team-id');
+                            showTeamDetails(teamId);
+                        });
+                    });
+                }
+                dataSheetContainer.style.display = 'block';
+            } catch (error) {
+                dataSheetContent.innerHTML = `
+                    <div class="empty-data-message">
+                        <i class="fas fa-exclamation-circle"></i> Error loading registrations: ${error.message}
+                    </div>
+                `;
+                dataSheetContainer.style.display = 'block';
+            }
+        }
+
+        // --- Dynamic Member Management (CRITICAL FIX: Reindexing) ---
+        function reindexMembers() {
+            const memberContainers = additionalMembers.querySelectorAll('.member-container');
+            memberCount = memberContainers.length;
+
+            memberContainers.forEach((container, index) => {
+                const memberNumber = index + 2;
+                container.id = `member-${memberNumber}`;
+                container.querySelector('h3').innerHTML = `<i class="fas fa-user"></i> Member ${memberNumber}`;
+                const removeBtn = container.querySelector('.remove-member');
+                removeBtn.dataset.member = memberNumber;
+
+                ['Name', 'Branch', 'College', 'Year', 'Contact', 'Email'].forEach(field => {
+                    const newId = `member${memberNumber}${field}`;
+                    const input = container.querySelector(`[id$="${field}"]`);
+                    if (input) {
+                        input.id = newId;
+                        input.name = newId;
+                        const label = container.querySelector(`label[for$="${field.toLowerCase()}"]`);
+                        if (label) {
+                            label.setAttribute('for', newId);
+                        }
+                    }
+                    const errorDiv = container.querySelector(`[id$="${field}Error"]`);
+                    if (errorDiv) {
+                        errorDiv.id = `${newId}Error`;
+                    }
+                });
+            });
+            addMemberBtn.style.display = memberCount < maxMembers ? 'inline-flex' : 'none';
+            document.getElementById('memberLimitError').style.display = 'none';
+        }
+
+        function addMember() {
+             if (memberCount >= maxMembers) {
+                document.getElementById('memberLimitError').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('memberLimitError').style.display = 'none';
+                }, 3000);
+                return;
+            }
+            memberCount++;
+            const memberNumber = memberCount + 1;
+            const memberDiv = document.createElement('div');
+            memberDiv.className = 'member-container';
+            memberDiv.id = `member-${memberNumber}`;
+            memberDiv.innerHTML = `
+                <div class="member-header">
+                    <h3><i class="fas fa-user"></i> Member ${memberNumber}</h3>
+                    <button type="button" class="remove-member" data-member="${memberNumber}">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label for="member${memberNumber}Name">Name *</label>
+                    <input type="text" id="member${memberNumber}Name" name="member${memberNumber}Name" required placeholder="Enter full name">
+                    <div class="error" id="member${memberNumber}NameError">Please enter a valid name</div>
+                </div>
+                <div class="form-group">
+                    <label for="member${memberNumber}Branch">Branch *</label>
+                    <select id="member${memberNumber}Branch" name="member${memberNumber}Branch" required>
+                        <option value="">Select Branch</option>
+                        <option value="CSE">CSE</option>
+                        <option value="ECE">ECE</option>
+                        <option value="ME">ME</option>
+                        <option value="CE">CE</option>
+                        <option value="EE">EE</option>
+                        <option value="Biotech">Biotech</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <div class="error" id="member${memberNumber}BranchError">Please select a branch</div>
+                </div>
+                <div class="form-group">
+                    <label for="member${memberNumber}College">College/University Name *</label>
+                    <input type="text" id="member${memberNumber}College" name="member${memberNumber}College" required placeholder="Enter college name">
+                    <div class="error" id="member${memberNumber}CollegeError">Please enter college name</div>
+                </div>
+                <div class="form-group">
+                    <label for="member${memberNumber}Year">Year of Study *</label>
+                    <select id="member${memberNumber}Year" name="member${memberNumber}Year" required>
+                        <option value="">Select Year</option>
+                        <option value="1st">1st</option>
+                        <option value="2nd">2nd</option>
+                        <option value="3rd">3rd</option>
+                        <option value="4th">4th</option>
+                    </select>
+                    <div class="error" id="member${memberNumber}YearError">Please select your year</div>
+                </div>
+                <div class="form-group">
+                    <label for="member${memberNumber}Contact">Contact Number *</label>
+                    <input type="tel" id="member${memberNumber}Contact" name="member${memberNumber}Contact" required placeholder="10-digit mobile number">
+                    <div class="error" id="member${memberNumber}ContactError">Enter a valid 10-digit phone number</div>
+                </div>
+                <div class="form-group">
+                    <label for="member${memberNumber}Email">Email ID *</label>
+                    <input type="email" id="member${memberNumber}Email" name="member${memberNumber}Email" required placeholder="your.email@example.com">
+                    <div class="error" id="member${memberNumber}EmailError">Please enter a valid email address</div>
+                </div>
+            `;
+            additionalMembers.appendChild(memberDiv);
+            memberDiv.querySelector('.remove-member').addEventListener('click', function () {
+                memberDiv.style.animation = 'scaleIn 0.3s ease reverse';
+                setTimeout(() => {
+                    memberDiv.remove();
+                    reindexMembers();
+                }, 300);
+            });
+            addMemberBtn.style.display = memberCount < maxMembers ? 'inline-flex' : 'none';
+            setTimeout(() => {
+                memberDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        }
+
+        addMemberBtn.addEventListener('click', addMember);
+
+        // --- File upload preview (FIXED: Error Hiding) ---
+        paymentScreenshot.addEventListener('change', function () {
+            const file = this.files[0];
+            
+            // ✅ FIX 1: Start by hiding the required error
+            paymentErrorDiv.style.display = 'none';
+
+            if (file) {
+                // Check Size
+                if (file.size > 5 * 1024 * 1024) {
+                    paymentErrorDiv.textContent = 'File size cannot exceed 5MB';
+                    paymentErrorDiv.style.display = 'block';
+                    this.value = '';
+                    filePreview.style.display = 'none';
+                    return;
+                }
+                
+                // Check Type
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+                if (!allowedTypes.includes(file.type)) {
+                    paymentErrorDiv.textContent = 'Only JPG, PNG, PDF files allowed';
+                    paymentErrorDiv.style.display = 'block';
+                    this.value = '';
+                    filePreview.style.display = 'none';
+                    return;
+                }
+                
+                // Show Preview
+                fileName.textContent = file.name;
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        previewImage.src = e.target.result;
+                        previewImage.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    previewImage.style.display = 'none';
+                    previewImage.src = '';
+                }
+                filePreview.style.display = 'flex';
+                // Error remains hidden (display: none)
+            } else {
+                filePreview.style.display = 'none';
+                fileName.textContent = '';
+                previewImage.src = '';
+                // If file is cleared, show required error again
+                paymentErrorDiv.textContent = 'File is required';
+                paymentErrorDiv.style.display = 'block';
+            }
+        });
+
+        // --- Form validation (FIXED: File validation check is tighter) ---
+        function validateForm() {
+            let isValid = true;
+            isValid = validateInput('teamName', /^.{3,50}$/, 'Team name must be between 3-50 characters') && isValid;
+            isValid = validateInput('leadName', /^[a-zA-Z\s]{2,50}$/, 'Please enter a valid name') && isValid;
+            isValid = validateSelect('leadBranch', 'Please select a branch') && isValid;
+            isValid = validateInput('leadCollege', null, 'Please enter college name') && isValid;
+            isValid = validateSelect('leadYear', 'Please select your year') && isValid;
+            isValid = validateInput('leadContact', /^[0-9]{10}$/, 'Enter a valid 10-digit phone number') && isValid;
+            isValid = validateInput('leadEmail', /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please enter a valid email address') && isValid;
+            for (let i = 2; i <= memberCount + 1; i++) {
+                isValid = validateInput(`member${i}Name`, /^[a-zA-Z\s]{2,50}$/, 'Please enter a valid name') && isValid;
+                isValid = validateSelect(`member${i}Branch`, 'Please select a branch') && isValid;
+                isValid = validateInput(`member${i}College`, null, 'Please enter college name') && isValid;
+                isValid = validateSelect(`member${i}Year`, 'Please select your year') && isValid;
+                isValid = validateInput(`member${i}Contact`, /^[0-9]{10}$/, 'Enter a valid 10-digit phone number') && isValid;
+                isValid = validateInput(`member${i}Email`, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please enter a valid email address') && isValid;
+            }
+            
+            // ✅ FIX 2: Check if file exists AND if the visible error div is hidden (meaning it passed size/type check)
+            if (!paymentScreenshot.files[0] || paymentErrorDiv.style.display === 'block') {
+                paymentErrorDiv.textContent = paymentErrorDiv.textContent === 'File is required' ? 'File is required' : 'Invalid file size/type.';
+                paymentErrorDiv.style.display = 'block';
+                isValid = false;
+            } else {
+                 paymentErrorDiv.style.display = 'none'; // Ensure it's hidden if checks pass
+            }
+            
+            if (!isValid) {
+                const firstError = document.querySelector('.error[style*="display: block"]');
+                if (firstError) {
+                    firstError.parentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+            return isValid;
+        }
+
+        // --- Submit form (UPDATED to save to MongoDB) ---
+        submitBtn.addEventListener('click', async function () {
+            if (!validateForm()) {
+                return;
+            }
+
+            loading.style.display = 'flex';
+
+            // Collect final form data
+            formData = {
+                teamName: document.getElementById('teamName').value.trim(),
+                teamLead: {
+                    name: document.getElementById('leadName').value.trim(),
+                    branch: document.getElementById('leadBranch').value,
+                    college: document.getElementById('leadCollege').value.trim(),
+                    year: document.getElementById('leadYear').value,
+                    contact: document.getElementById('leadContact').value.trim(),
+                    email: document.getElementById('leadEmail').value.trim()
+                },
+                additionalMembers: []
+            };
+
+            for (let i = 2; i <= memberCount + 1; i++) {
+                const memberNameElement = document.getElementById(`member${i}Name`);
+                if (memberNameElement) {
+                    formData.additionalMembers.push({
+                        name: memberNameElement.value.trim(),
+                        branch: document.getElementById(`member${i}Branch`).value,
+                        college: document.getElementById(`member${i}College`).value.trim(),
+                        year: document.getElementById(`member${i}Year`).value,
+                        contact: document.getElementById(`member${i}Contact`).value.trim(),
+                        email: document.getElementById(`member${i}Email`).value.trim()
+                    });
+                }
+            }
+
+            // Submit to MongoDB via API
+            try {
+                const formDataToSend = new FormData();
+                formDataToSend.append('formData', JSON.stringify(formData));
+                formDataToSend.append('paymentScreenshot', paymentScreenshot.files[0]);
+
+                const response = await fetch('http://localhost:3000/api/registrations', {
+                    method: 'POST',
+                    body: formDataToSend
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to submit registration');
+                }
+
+                const result = await response.json();
+                registrationId = result.id;
+                
+                // Store the file object in the global state using the new ID
+                uploadedPaymentProof[registrationId] = paymentScreenshot.files[0];
+
+                loading.style.display = 'none';
+                
+                // Reset file input and preview after successful registration
+                paymentScreenshot.value = '';
+                filePreview.style.display = 'none';
+                fileName.textContent = '';
+                previewImage.src = '';
+                
+                showSuccessPage();
+            } catch (error) {
+                loading.style.display = 'none';
+                alert('Error submitting registration: ' + error.message);
+                console.error('Submission error:', error);
+            }
+        });
+
+        // Data sheet button listeners
+        viewDataBtn.addEventListener('click', renderDataSheet);
+        backToFormBtn.addEventListener('click', showForm);
+        backToDataSheetBtn.addEventListener('click', renderDataSheet);
+
+        // Initialize: Show form on load
+        showForm();
+    });
+</script>
+</body>
+
+</html>
