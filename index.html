@@ -1317,7 +1317,7 @@ Registration Date: ${new Date().toLocaleString()}
             hideAllContainers();
             
             try {
-                const response = await fetch('http://localhost:3000/api/registrations');
+                const response = await fetch('https://rough-ipl-auction.onrender.com/api/registrations');
                 const registrations = await response.json();
                 const team = registrations.find(reg => reg.id === teamId);
                 
@@ -1346,7 +1346,7 @@ Registration Date: ${new Date().toLocaleString()}
                     }
                 } else if (team.paymentScreenshot) {
                     // Fetch from server
-                    const screenshotUrl = `http://localhost:3000/api/registrations/${teamId}/screenshot`;
+                    const screenshotUrl = `https://rough-ipl-auction.onrender.com/api/registrations/${teamId}/screenshot`;
                     if (team.paymentScreenshot.contentType.startsWith('image/')) {
                         proofContainer.innerHTML = `<img src="${screenshotUrl}" alt="Payment Screenshot Preview" style="max-width: 100%; height: auto; border-radius: 8px; margin-top: 15px; border: 2px solid var(--success-green);">`;
                     } else {
@@ -1393,7 +1393,7 @@ Registration Date: ${new Date().toLocaleString()}
             hideAllContainers();
 
             try {
-                const response = await fetch('http://localhost:3000/api/registrations');
+                const response = await fetch('https://rough-ipl-auction.onrender.com/api/registrations');
                 const registrations = await response.json();
 
                 if (registrations.length === 0) {
@@ -1696,7 +1696,7 @@ Registration Date: ${new Date().toLocaleString()}
                 formDataToSend.append('formData', JSON.stringify(formData));
                 formDataToSend.append('paymentScreenshot', paymentScreenshot.files[0]);
 
-                const response = await fetch('http://localhost:3000/api/registrations', {
+                const response = await fetch('https://rough-ipl-auction.onrender.com/api/registrations', {
                     method: 'POST',
                     body: formDataToSend
                 });
