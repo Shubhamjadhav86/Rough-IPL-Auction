@@ -86,6 +86,33 @@ app.post('/api/registrations', upload.single('paymentScreenshot'), async (req, r
         };
 
         const result = await registrationsCollection.insertOne(registration);
+        
+        // Send data to webhook
+        const webhookData = {
+            id: registrationId,
+            teamName: formData.teamName,
+            teamLead: formData.teamLead,
+            additionalMembers: formData.additionalMembers || [],
+            totalMembers: 1 + (formData.additionalMembers?.length || 0),
+            registrationDate: registration.registrationDate,
+            paymentProof: {
+                filename: req.file.originalname,
+                contentType: req.file.mimetype
+            }
+        };
+        
+        // Post to webhook (non-blocking)
+        fetch('https://mako-amused-clearly.ngrok-free.app/webhook-test/reg', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(webhookData)
+        }).catch(err => {
+            console.error('Webhook error:', err);
+            // Don't fail the registration if webhook fails
+        });
+        
         res.json({ success: true, id: registrationId, insertedId: result.insertedId });
     } catch (error) {
         console.error('Error creating registration:', error);

@@ -1029,8 +1029,9 @@
                 <div class="payment-section">
                     <div class="payment-info">
                         <div class="qr-code">
-                            <i class="fas fa-qrcode fa-4x"></i>
+                            <img src="QRcode.jpg" alt="QR Code" style="width: 150px; border-radius: 10px;">
                         </div>
+
                         <div class="payment-details">
                             <h3>Registration Fee: ₹300</h3>
                             <p><i class="fas fa-info-circle"></i> Scan the QR code to make the payment</p>
@@ -1163,97 +1164,97 @@
     </div>
 
     // --- Start of UPDATED SCRIPT ---
-<script>
-    // Smooth scroll indicator 
-    window.addEventListener('scroll', () => {
-        const scrollIndicator = document.getElementById('scrollIndicator');
-        const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const scrolled = (window.scrollY / windowHeight);
-        scrollIndicator.style.transform = `scaleX(${scrolled})`;
-    });
+    <script>
+        // Smooth scroll indicator 
+        window.addEventListener('scroll', () => {
+            const scrollIndicator = document.getElementById('scrollIndicator');
+            const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (window.scrollY / windowHeight);
+            scrollIndicator.style.transform = `scaleX(${scrolled})`;
+        });
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // DOM Elements
-        const registrationForm = document.getElementById('registrationForm');
-        const successContainer = document.getElementById('successContainer');
-        const dataSheetContainer = document.getElementById('dataSheetContainer');
-        const detailViewContainer = document.getElementById('detailViewContainer'); 
-        const dataSheetContent = document.getElementById('dataSheetContent');
-        const addMemberBtn = document.getElementById('addMemberBtn');
-        const submitBtn = document.getElementById('submitBtn');
-        const viewDataBtn = document.getElementById('viewDataBtn');
-        const backToFormBtn = document.getElementById('backToFormBtn');
-        const backToDataSheetBtn = document.getElementById('backToDataSheetBtn');
-        const paymentScreenshot = document.getElementById('paymentScreenshot');
-        const filePreview = document.getElementById('filePreview');
-        const previewImage = document.getElementById('previewImage');
-        const fileName = document.getElementById('fileName');
-        const loading = document.getElementById('loading');
-        const toast = document.getElementById('toast');
-        const backToHomeBtn = document.getElementById('backToHomeBtn');
-        const additionalMembers = document.getElementById('additionalMembers');
-        const paymentErrorDiv = document.getElementById('paymentScreenshotError'); // ✅ Fetched error div
+        document.addEventListener('DOMContentLoaded', function () {
+            // DOM Elements
+            const registrationForm = document.getElementById('registrationForm');
+            const successContainer = document.getElementById('successContainer');
+            const dataSheetContainer = document.getElementById('dataSheetContainer');
+            const detailViewContainer = document.getElementById('detailViewContainer');
+            const dataSheetContent = document.getElementById('dataSheetContent');
+            const addMemberBtn = document.getElementById('addMemberBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            const viewDataBtn = document.getElementById('viewDataBtn');
+            const backToFormBtn = document.getElementById('backToFormBtn');
+            const backToDataSheetBtn = document.getElementById('backToDataSheetBtn');
+            const paymentScreenshot = document.getElementById('paymentScreenshot');
+            const filePreview = document.getElementById('filePreview');
+            const previewImage = document.getElementById('previewImage');
+            const fileName = document.getElementById('fileName');
+            const loading = document.getElementById('loading');
+            const toast = document.getElementById('toast');
+            const backToHomeBtn = document.getElementById('backToHomeBtn');
+            const additionalMembers = document.getElementById('additionalMembers');
+            const paymentErrorDiv = document.getElementById('paymentScreenshotError'); // ✅ Fetched error div
 
-        // State
-        let memberCount = 0;
-        const maxMembers = 3;
-        let registrationId = '';
-        let formData = {};
-        let uploadedPaymentProof = {}; // ✅ NEW STATE: Temporary file storage for current session
-        
-        // --- Validation Helper Functions (UNCHANGED) ---
-        function validateInput(id, regex, errorMsg) {
-            const input = document.getElementById(id);
-            const error = document.getElementById(id + 'Error');
-            if (!input || !error) return true;
-            const value = input.value.trim();
-            if (value === '' || (regex && !regex.test(value))) {
-                error.textContent = errorMsg || 'This field is required.';
-                error.style.display = 'block';
-                return false;
-            } else {
-                error.style.display = 'none';
-                return true;
+            // State
+            let memberCount = 0;
+            const maxMembers = 3;
+            let registrationId = '';
+            let formData = {};
+            let uploadedPaymentProof = {}; // ✅ NEW STATE: Temporary file storage for current session
+
+            // --- Validation Helper Functions (UNCHANGED) ---
+            function validateInput(id, regex, errorMsg) {
+                const input = document.getElementById(id);
+                const error = document.getElementById(id + 'Error');
+                if (!input || !error) return true;
+                const value = input.value.trim();
+                if (value === '' || (regex && !regex.test(value))) {
+                    error.textContent = errorMsg || 'This field is required.';
+                    error.style.display = 'block';
+                    return false;
+                } else {
+                    error.style.display = 'none';
+                    return true;
+                }
             }
-        }
-        function validateSelect(id, errorMsg) {
-            const select = document.getElementById(id);
-            const error = document.getElementById(id + 'Error');
-            if (!select || !error) return true;
-            if (select.value === '') {
-                error.textContent = errorMsg || 'Please select an option.';
-                error.style.display = 'block';
-                return false;
-            } else {
-                error.style.display = 'none';
-                return true;
+            function validateSelect(id, errorMsg) {
+                const select = document.getElementById(id);
+                const error = document.getElementById(id + 'Error');
+                if (!select || !error) return true;
+                if (select.value === '') {
+                    error.textContent = errorMsg || 'Please select an option.';
+                    error.style.display = 'block';
+                    return false;
+                } else {
+                    error.style.display = 'none';
+                    return true;
+                }
             }
-        }
-        
-        // --- Utility Functions for View Toggling (UNCHANGED) ---
-        function hideAllContainers() {
-            registrationForm.style.display = 'none';
-            successContainer.style.display = 'none';
-            dataSheetContainer.style.display = 'none';
-            detailViewContainer.style.display = 'none';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
 
-        function showForm() {
-            hideAllContainers();
-            registrationForm.style.display = 'block';
-        }
+            // --- Utility Functions for View Toggling (UNCHANGED) ---
+            function hideAllContainers() {
+                registrationForm.style.display = 'none';
+                successContainer.style.display = 'none';
+                dataSheetContainer.style.display = 'none';
+                detailViewContainer.style.display = 'none';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
 
-        function showSuccessPage() {
-            hideAllContainers();
-            
-            // ... (Your original success page rendering logic) ...
-            document.getElementById('registrationId').innerHTML = `
+            function showForm() {
+                hideAllContainers();
+                registrationForm.style.display = 'block';
+            }
+
+            function showSuccessPage() {
+                hideAllContainers();
+
+                // ... (Your original success page rendering logic) ...
+                document.getElementById('registrationId').innerHTML = `
                 ${registrationId}
                 <button class="copy-btn" id="copyBtn">Copy</button>
             `;
-            
-            let summaryHTML = `
+
+                let summaryHTML = `
                 <div class="summary-item">
                     <div class="summary-label">Team Name:</div>
                     <div>${formData.teamName}</div>
@@ -1267,31 +1268,31 @@
                     <div>${1 + formData.additionalMembers.length}</div>
                 </div>
             `;
-            
-            if (formData.additionalMembers.length > 0) {
-                summaryHTML += '<div class="summary-item"><div class="summary-label">Team Members:</div><div>';
-                formData.additionalMembers.forEach((member, index) => {
-                    summaryHTML += `${member.name}${index < formData.additionalMembers.length - 1 ? ', ' : ''}`;
+
+                if (formData.additionalMembers.length > 0) {
+                    summaryHTML += '<div class="summary-item"><div class="summary-label">Team Members:</div><div>';
+                    formData.additionalMembers.forEach((member, index) => {
+                        summaryHTML += `${member.name}${index < formData.additionalMembers.length - 1 ? ', ' : ''}`;
+                    });
+                    summaryHTML += '</div></div>';
+                }
+
+                document.getElementById('summaryContent').innerHTML = summaryHTML;
+
+                successContainer.style.display = 'block';
+
+                document.getElementById('copyBtn').addEventListener('click', function () {
+                    navigator.clipboard.writeText(registrationId).then(function () {
+                        toast.style.display = 'block';
+                        setTimeout(function () {
+                            toast.style.display = 'none';
+                        }, 3000);
+                    });
                 });
-                summaryHTML += '</div></div>';
-            }
-            
-            document.getElementById('summaryContent').innerHTML = summaryHTML;
-            
-            successContainer.style.display = 'block';
-            
-            document.getElementById('copyBtn').addEventListener('click', function() {
-                navigator.clipboard.writeText(registrationId).then(function() {
-                    toast.style.display = 'block';
-                    setTimeout(function() {
-                        toast.style.display = 'none';
-                    }, 3000);
-                });
-            });
-            
-            document.getElementById('downloadBtn').addEventListener('click', function() {
-                const element = document.createElement('a');
-                const fileContent = `
+
+                document.getElementById('downloadBtn').addEventListener('click', function () {
+                    const element = document.createElement('a');
+                    const fileContent = `
 Registration ID: ${registrationId}
 Team Name: ${formData.teamName}
 Team Lead: ${formData.teamLead.name}
@@ -1299,111 +1300,111 @@ Total Members: ${1 + formData.additionalMembers.length}
 Additional Members: ${formData.additionalMembers.map(m => m.name).join(', ')}
 Registration Date: ${new Date().toLocaleString()}
 `;
-                const file = new Blob([fileContent], { type: 'text/plain' });
-                element.href = URL.createObjectURL(file);
-                element.download = `${registrationId}_confirmation.txt`;
-                document.body.appendChild(element);
-                element.click();
-                document.body.removeChild(element);
-            });
-            
-            backToHomeBtn.addEventListener('click', function() {
-                window.location.reload();
-            });
-        }
-        
-        // --- Show Team Details (Updated to fetch from MongoDB) ---
-        async function showTeamDetails(teamId) {
-            hideAllContainers();
-            
-            try {
-                const response = await fetch('https://rough-ipl-auction.onrender.com/api/registrations');
-                const registrations = await response.json();
-                const team = registrations.find(reg => reg.id === teamId);
-                
-                if (!team) {
-                    alert('Team not found!');
+                    const file = new Blob([fileContent], { type: 'text/plain' });
+                    element.href = URL.createObjectURL(file);
+                    element.download = `${registrationId}_confirmation.txt`;
+                    document.body.appendChild(element);
+                    element.click();
+                    document.body.removeChild(element);
+                });
+
+                backToHomeBtn.addEventListener('click', function () {
+                    window.location.reload();
+                });
+            }
+
+            // --- Show Team Details (Updated to fetch from MongoDB) ---
+            async function showTeamDetails(teamId) {
+                hideAllContainers();
+
+                try {
+                    const response = await fetch('https://rough-ipl-auction.onrender.com/api/registrations');
+                    const registrations = await response.json();
+                    const team = registrations.find(reg => reg.id === teamId);
+
+                    if (!team) {
+                        alert('Team not found!');
+                        renderDataSheet();
+                        return;
+                    }
+
+                    document.getElementById('detailTeamName').textContent = team.teamName;
+                    document.getElementById('detailSSFileName').textContent = team.paymentScreenshot?.filename || 'N/A';
+
+                    const proofContainer = document.getElementById('paymentProofContainer');
+                    const file = uploadedPaymentProof[teamId];
+
+                    // ✅ SS PREVIEW LOGIC - Try local file first, then fetch from server
+                    if (file) {
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                proofContainer.innerHTML = `<img src="${e.target.result}" alt="Payment Screenshot Preview" style="max-width: 100%; height: auto; border-radius: 8px; margin-top: 15px; border: 2px solid var(--success-green);">`;
+                            };
+                            reader.readAsDataURL(file);
+                        } else if (file.type === 'application/pdf') {
+                            proofContainer.innerHTML = `<p style="color: var(--primary-blue); font-weight: 600; margin-top: 15px; text-align: left;"><i class="fas fa-file-pdf"></i> PDF File uploaded: ${file.name}. Preview not supported here.</p>`;
+                        }
+                    } else if (team.paymentScreenshot) {
+                        // Fetch from server
+                        const screenshotUrl = `https://rough-ipl-auction.onrender.com/api/registrations/${teamId}/screenshot`;
+                        if (team.paymentScreenshot.contentType.startsWith('image/')) {
+                            proofContainer.innerHTML = `<img src="${screenshotUrl}" alt="Payment Screenshot Preview" style="max-width: 100%; height: auto; border-radius: 8px; margin-top: 15px; border: 2px solid var(--success-green);">`;
+                        } else {
+                            proofContainer.innerHTML = `<p style="color: var(--primary-blue); font-weight: 600; margin-top: 15px; text-align: left;"><i class="fas fa-file-pdf"></i> PDF File: ${team.paymentScreenshot.filename}</p>`;
+                        }
+                    } else {
+                        proofContainer.innerHTML = `<p style="color: var(--error-red); margin-top: 15px;">No payment proof found.</p>`;
+                    }
+                } catch (error) {
+                    alert('Error loading team details: ' + error.message);
                     renderDataSheet();
                     return;
                 }
 
-                document.getElementById('detailTeamName').textContent = team.teamName;
-                document.getElementById('detailSSFileName').textContent = team.paymentScreenshot?.filename || 'N/A';
-                
-                const proofContainer = document.getElementById('paymentProofContainer');
-                const file = uploadedPaymentProof[teamId]; 
+                let detailHTML = '';
+                // Team Lead Details
+                detailHTML += `<div class="team-summary"><h3>Team Lead: ${team.teamLead.name}</h3>`;
+                detailHTML += `<div class="summary-item"><div class="summary-label">Contact:</div><div>${team.teamLead.contact}</div></div>`;
+                detailHTML += `<div class="summary-item"><div class="summary-label">Email:</div><div>${team.teamLead.email}</div></div>`;
+                detailHTML += `<div class="summary-item"><div class="summary-label">College:</div><div>${team.teamLead.college}</div></div>`;
+                detailHTML += `<div class="summary-item"><div class="summary-label">Branch/Year:</div><div>${team.teamLead.branch}, ${team.teamLead.year}</div></div>`;
+                detailHTML += '</div>';
 
-                // ✅ SS PREVIEW LOGIC - Try local file first, then fetch from server
-                if (file) {
-                    if (file.type.startsWith('image/')) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            proofContainer.innerHTML = `<img src="${e.target.result}" alt="Payment Screenshot Preview" style="max-width: 100%; height: auto; border-radius: 8px; margin-top: 15px; border: 2px solid var(--success-green);">`;
-                        };
-                        reader.readAsDataURL(file);
-                    } else if (file.type === 'application/pdf') {
-                         proofContainer.innerHTML = `<p style="color: var(--primary-blue); font-weight: 600; margin-top: 15px; text-align: left;"><i class="fas fa-file-pdf"></i> PDF File uploaded: ${file.name}. Preview not supported here.</p>`;
-                    }
-                } else if (team.paymentScreenshot) {
-                    // Fetch from server
-                    const screenshotUrl = `https://rough-ipl-auction.onrender.com/api/registrations/${teamId}/screenshot`;
-                    if (team.paymentScreenshot.contentType.startsWith('image/')) {
-                        proofContainer.innerHTML = `<img src="${screenshotUrl}" alt="Payment Screenshot Preview" style="max-width: 100%; height: auto; border-radius: 8px; margin-top: 15px; border: 2px solid var(--success-green);">`;
-                    } else {
-                        proofContainer.innerHTML = `<p style="color: var(--primary-blue); font-weight: 600; margin-top: 15px; text-align: left;"><i class="fas fa-file-pdf"></i> PDF File: ${team.paymentScreenshot.filename}</p>`;
-                    }
+                // Additional Members Details
+                if (team.additionalMembers.length > 0) {
+                    team.additionalMembers.forEach((member, index) => {
+                        detailHTML += `<div class="team-summary" style="margin-top: 20px;"><h3>Member ${index + 2}: ${member.name}</h3>`;
+                        detailHTML += `<div class="summary-item"><div class="summary-label">Contact:</div><div>${member.contact}</div></div>`;
+                        detailHTML += `<div class="summary-item"><div class="summary-label">Email:</div><div>${member.email}</div></div>`;
+                        detailHTML += `<div class="summary-item"><div class="summary-label">College:</div><div>${member.college}</div></div>`;
+                        detailHTML += `<div class="summary-item"><div class="summary-label">Branch/Year:</div><div>${member.branch}, ${member.year}</div></div>`;
+                        detailHTML += '</div>';
+                    });
                 } else {
-                    proofContainer.innerHTML = `<p style="color: var(--error-red); margin-top: 15px;">No payment proof found.</p>`;
+                    detailHTML += `<p style="color: var(--text-light); text-align: center; padding: 15px;">No additional members registered.</p>`;
                 }
-            } catch (error) {
-                alert('Error loading team details: ' + error.message);
-                renderDataSheet();
-                return;
-            }
-            
-            let detailHTML = '';
-            // Team Lead Details
-            detailHTML += `<div class="team-summary"><h3>Team Lead: ${team.teamLead.name}</h3>`;
-            detailHTML += `<div class="summary-item"><div class="summary-label">Contact:</div><div>${team.teamLead.contact}</div></div>`;
-            detailHTML += `<div class="summary-item"><div class="summary-label">Email:</div><div>${team.teamLead.email}</div></div>`;
-            detailHTML += `<div class="summary-item"><div class="summary-label">College:</div><div>${team.teamLead.college}</div></div>`;
-            detailHTML += `<div class="summary-item"><div class="summary-label">Branch/Year:</div><div>${team.teamLead.branch}, ${team.teamLead.year}</div></div>`;
-            detailHTML += '</div>';
 
-            // Additional Members Details
-            if (team.additionalMembers.length > 0) {
-                team.additionalMembers.forEach((member, index) => {
-                    detailHTML += `<div class="team-summary" style="margin-top: 20px;"><h3>Member ${index + 2}: ${member.name}</h3>`;
-                    detailHTML += `<div class="summary-item"><div class="summary-label">Contact:</div><div>${member.contact}</div></div>`;
-                    detailHTML += `<div class="summary-item"><div class="summary-label">Email:</div><div>${member.email}</div></div>`;
-                    detailHTML += `<div class="summary-item"><div class="summary-label">College:</div><div>${member.college}</div></div>`;
-                    detailHTML += `<div class="summary-item"><div class="summary-label">Branch/Year:</div><div>${member.branch}, ${member.year}</div></div>`;
-                    detailHTML += '</div>';
-                });
-            } else {
-                 detailHTML += `<p style="color: var(--text-light); text-align: center; padding: 15px;">No additional members registered.</p>`;
+                document.getElementById('detailContent').innerHTML = detailHTML;
+                detailViewContainer.style.display = 'block';
             }
 
-            document.getElementById('detailContent').innerHTML = detailHTML;
-            detailViewContainer.style.display = 'block';
-        }
-        
-        // --- Render Data Sheet (Updated to fetch from MongoDB) ---
-        async function renderDataSheet() {
-            hideAllContainers();
+            // --- Render Data Sheet (Updated to fetch from MongoDB) ---
+            async function renderDataSheet() {
+                hideAllContainers();
 
-            try {
-                const response = await fetch('https://rough-ipl-auction.onrender.com/api/registrations');
-                const registrations = await response.json();
+                try {
+                    const response = await fetch('https://rough-ipl-auction.onrender.com/api/registrations');
+                    const registrations = await response.json();
 
-                if (registrations.length === 0) {
-                    dataSheetContent.innerHTML = `
+                    if (registrations.length === 0) {
+                        dataSheetContent.innerHTML = `
                         <div class="empty-data-message">
                             <i class="fas fa-exclamation-circle"></i> No teams have registered yet.
                         </div>
                     `;
-                } else {
-                    let tableHTML = `
+                    } else {
+                        let tableHTML = `
                         <table class="registration-table">
                             <thead>
                                 <tr>
@@ -1429,74 +1430,74 @@ Registration Date: ${new Date().toLocaleString()}
                             </tbody>
                         </table>
                     `;
-                    dataSheetContent.innerHTML = tableHTML;
+                        dataSheetContent.innerHTML = tableHTML;
 
-                    // Add event listeners to table rows
-                    dataSheetContent.querySelectorAll('tr[data-team-id]').forEach(row => {
-                        row.addEventListener('click', function () {
-                            const teamId = this.getAttribute('data-team-id');
-                            showTeamDetails(teamId);
+                        // Add event listeners to table rows
+                        dataSheetContent.querySelectorAll('tr[data-team-id]').forEach(row => {
+                            row.addEventListener('click', function () {
+                                const teamId = this.getAttribute('data-team-id');
+                                showTeamDetails(teamId);
+                            });
                         });
-                    });
-                }
-                dataSheetContainer.style.display = 'block';
-            } catch (error) {
-                dataSheetContent.innerHTML = `
+                    }
+                    dataSheetContainer.style.display = 'block';
+                } catch (error) {
+                    dataSheetContent.innerHTML = `
                     <div class="empty-data-message">
                         <i class="fas fa-exclamation-circle"></i> Error loading registrations: ${error.message}
                     </div>
                 `;
-                dataSheetContainer.style.display = 'block';
+                    dataSheetContainer.style.display = 'block';
+                }
             }
-        }
 
-        // --- Dynamic Member Management (CRITICAL FIX: Reindexing) ---
-        function reindexMembers() {
-            const memberContainers = additionalMembers.querySelectorAll('.member-container');
-            memberCount = memberContainers.length;
+            // --- Dynamic Member Management (CRITICAL FIX: Reindexing) ---
+            function reindexMembers() {
+                const memberContainers = additionalMembers.querySelectorAll('.member-container');
+                memberCount = memberContainers.length;
 
-            memberContainers.forEach((container, index) => {
-                const memberNumber = index + 2;
-                container.id = `member-${memberNumber}`;
-                container.querySelector('h3').innerHTML = `<i class="fas fa-user"></i> Member ${memberNumber}`;
-                const removeBtn = container.querySelector('.remove-member');
-                removeBtn.dataset.member = memberNumber;
+                memberContainers.forEach((container, index) => {
+                    const memberNumber = index + 2;
+                    container.id = `member-${memberNumber}`;
+                    container.querySelector('h3').innerHTML = `<i class="fas fa-user"></i> Member ${memberNumber}`;
+                    const removeBtn = container.querySelector('.remove-member');
+                    removeBtn.dataset.member = memberNumber;
 
-                ['Name', 'Branch', 'College', 'Year', 'Contact', 'Email'].forEach(field => {
-                    const newId = `member${memberNumber}${field}`;
-                    const input = container.querySelector(`[id$="${field}"]`);
-                    if (input) {
-                        input.id = newId;
-                        input.name = newId;
-                        const label = container.querySelector(`label[for$="${field.toLowerCase()}"]`);
-                        if (label) {
-                            label.setAttribute('for', newId);
+                    ['Name', 'Branch', 'College', 'Year', 'Contact', 'Email'].forEach(field => {
+                        const newId = `member${memberNumber}${field}`;
+                        const input = container.querySelector(`[id$="${field}"]`);
+                        if (input) {
+                            input.id = newId;
+                            input.name = newId;
+                            const label = container.querySelector(`label[for$="${field.toLowerCase()}"]`);
+                            if (label) {
+                                label.setAttribute('for', newId);
+                            }
                         }
-                    }
-                    const errorDiv = container.querySelector(`[id$="${field}Error"]`);
-                    if (errorDiv) {
-                        errorDiv.id = `${newId}Error`;
-                    }
+                        const errorDiv = container.querySelector(`[id$="${field}Error"]`);
+                        if (errorDiv) {
+                            errorDiv.id = `${newId}Error`;
+                        }
+                    });
                 });
-            });
-            addMemberBtn.style.display = memberCount < maxMembers ? 'inline-flex' : 'none';
-            document.getElementById('memberLimitError').style.display = 'none';
-        }
-
-        function addMember() {
-             if (memberCount >= maxMembers) {
-                document.getElementById('memberLimitError').style.display = 'block';
-                setTimeout(() => {
-                    document.getElementById('memberLimitError').style.display = 'none';
-                }, 3000);
-                return;
+                addMemberBtn.style.display = memberCount < maxMembers ? 'inline-flex' : 'none';
+                document.getElementById('memberLimitError').style.display = 'none';
             }
-            memberCount++;
-            const memberNumber = memberCount + 1;
-            const memberDiv = document.createElement('div');
-            memberDiv.className = 'member-container';
-            memberDiv.id = `member-${memberNumber}`;
-            memberDiv.innerHTML = `
+
+            function addMember() {
+                if (memberCount >= maxMembers) {
+                    document.getElementById('memberLimitError').style.display = 'block';
+                    setTimeout(() => {
+                        document.getElementById('memberLimitError').style.display = 'none';
+                    }, 3000);
+                    return;
+                }
+                memberCount++;
+                const memberNumber = memberCount + 1;
+                const memberDiv = document.createElement('div');
+                memberDiv.className = 'member-container';
+                memberDiv.id = `member-${memberNumber}`;
+                memberDiv.innerHTML = `
                 <div class="member-header">
                     <h3><i class="fas fa-user"></i> Member ${memberNumber}</h3>
                     <button type="button" class="remove-member" data-member="${memberNumber}">
@@ -1549,193 +1550,193 @@ Registration Date: ${new Date().toLocaleString()}
                     <div class="error" id="member${memberNumber}EmailError">Please enter a valid email address</div>
                 </div>
             `;
-            additionalMembers.appendChild(memberDiv);
-            memberDiv.querySelector('.remove-member').addEventListener('click', function () {
-                memberDiv.style.animation = 'scaleIn 0.3s ease reverse';
-                setTimeout(() => {
-                    memberDiv.remove();
-                    reindexMembers();
-                }, 300);
-            });
-            addMemberBtn.style.display = memberCount < maxMembers ? 'inline-flex' : 'none';
-            setTimeout(() => {
-                memberDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 100);
-        }
-
-        addMemberBtn.addEventListener('click', addMember);
-
-        // --- File upload preview (FIXED: Error Hiding) ---
-        paymentScreenshot.addEventListener('change', function () {
-            const file = this.files[0];
-            
-            // ✅ FIX 1: Start by hiding the required error
-            paymentErrorDiv.style.display = 'none';
-
-            if (file) {
-                // Check Size
-                if (file.size > 5 * 1024 * 1024) {
-                    paymentErrorDiv.textContent = 'File size cannot exceed 5MB';
-                    paymentErrorDiv.style.display = 'block';
-                    this.value = '';
-                    filePreview.style.display = 'none';
-                    return;
-                }
-                
-                // Check Type
-                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
-                if (!allowedTypes.includes(file.type)) {
-                    paymentErrorDiv.textContent = 'Only JPG, PNG, PDF files allowed';
-                    paymentErrorDiv.style.display = 'block';
-                    this.value = '';
-                    filePreview.style.display = 'none';
-                    return;
-                }
-                
-                // Show Preview
-                fileName.textContent = file.name;
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        previewImage.src = e.target.result;
-                        previewImage.style.display = 'block';
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    previewImage.style.display = 'none';
-                    previewImage.src = '';
-                }
-                filePreview.style.display = 'flex';
-                // Error remains hidden (display: none)
-            } else {
-                filePreview.style.display = 'none';
-                fileName.textContent = '';
-                previewImage.src = '';
-                // If file is cleared, show required error again
-                paymentErrorDiv.textContent = 'File is required';
-                paymentErrorDiv.style.display = 'block';
-            }
-        });
-
-        // --- Form validation (FIXED: File validation check is tighter) ---
-        function validateForm() {
-            let isValid = true;
-            isValid = validateInput('teamName', /^.{3,50}$/, 'Team name must be between 3-50 characters') && isValid;
-            isValid = validateInput('leadName', /^[a-zA-Z\s]{2,50}$/, 'Please enter a valid name') && isValid;
-            isValid = validateSelect('leadBranch', 'Please select a branch') && isValid;
-            isValid = validateInput('leadCollege', null, 'Please enter college name') && isValid;
-            isValid = validateSelect('leadYear', 'Please select your year') && isValid;
-            isValid = validateInput('leadContact', /^[0-9]{10}$/, 'Enter a valid 10-digit phone number') && isValid;
-            isValid = validateInput('leadEmail', /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please enter a valid email address') && isValid;
-            for (let i = 2; i <= memberCount + 1; i++) {
-                isValid = validateInput(`member${i}Name`, /^[a-zA-Z\s]{2,50}$/, 'Please enter a valid name') && isValid;
-                isValid = validateSelect(`member${i}Branch`, 'Please select a branch') && isValid;
-                isValid = validateInput(`member${i}College`, null, 'Please enter college name') && isValid;
-                isValid = validateSelect(`member${i}Year`, 'Please select your year') && isValid;
-                isValid = validateInput(`member${i}Contact`, /^[0-9]{10}$/, 'Enter a valid 10-digit phone number') && isValid;
-                isValid = validateInput(`member${i}Email`, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please enter a valid email address') && isValid;
-            }
-            
-            // ✅ FIX 2: Check if file exists AND if the visible error div is hidden (meaning it passed size/type check)
-            if (!paymentScreenshot.files[0] || paymentErrorDiv.style.display === 'block') {
-                paymentErrorDiv.textContent = paymentErrorDiv.textContent === 'File is required' ? 'File is required' : 'Invalid file size/type.';
-                paymentErrorDiv.style.display = 'block';
-                isValid = false;
-            } else {
-                 paymentErrorDiv.style.display = 'none'; // Ensure it's hidden if checks pass
-            }
-            
-            if (!isValid) {
-                const firstError = document.querySelector('.error[style*="display: block"]');
-                if (firstError) {
-                    firstError.parentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }
-            return isValid;
-        }
-
-        // --- Submit form (UPDATED to save to MongoDB) ---
-        submitBtn.addEventListener('click', async function () {
-            if (!validateForm()) {
-                return;
-            }
-
-            loading.style.display = 'flex';
-
-            // Collect final form data
-            formData = {
-                teamName: document.getElementById('teamName').value.trim(),
-                teamLead: {
-                    name: document.getElementById('leadName').value.trim(),
-                    branch: document.getElementById('leadBranch').value,
-                    college: document.getElementById('leadCollege').value.trim(),
-                    year: document.getElementById('leadYear').value,
-                    contact: document.getElementById('leadContact').value.trim(),
-                    email: document.getElementById('leadEmail').value.trim()
-                },
-                additionalMembers: []
-            };
-
-            for (let i = 2; i <= memberCount + 1; i++) {
-                const memberNameElement = document.getElementById(`member${i}Name`);
-                if (memberNameElement) {
-                    formData.additionalMembers.push({
-                        name: memberNameElement.value.trim(),
-                        branch: document.getElementById(`member${i}Branch`).value,
-                        college: document.getElementById(`member${i}College`).value.trim(),
-                        year: document.getElementById(`member${i}Year`).value,
-                        contact: document.getElementById(`member${i}Contact`).value.trim(),
-                        email: document.getElementById(`member${i}Email`).value.trim()
-                    });
-                }
-            }
-
-            // Submit to MongoDB via API
-            try {
-                const formDataToSend = new FormData();
-                formDataToSend.append('formData', JSON.stringify(formData));
-                formDataToSend.append('paymentScreenshot', paymentScreenshot.files[0]);
-
-                const response = await fetch('https://rough-ipl-auction.onrender.com/api/registrations', {
-                    method: 'POST',
-                    body: formDataToSend
+                additionalMembers.appendChild(memberDiv);
+                memberDiv.querySelector('.remove-member').addEventListener('click', function () {
+                    memberDiv.style.animation = 'scaleIn 0.3s ease reverse';
+                    setTimeout(() => {
+                        memberDiv.remove();
+                        reindexMembers();
+                    }, 300);
                 });
+                addMemberBtn.style.display = memberCount < maxMembers ? 'inline-flex' : 'none';
+                setTimeout(() => {
+                    memberDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
+            }
 
-                if (!response.ok) {
-                    throw new Error('Failed to submit registration');
+            addMemberBtn.addEventListener('click', addMember);
+
+            // --- File upload preview (FIXED: Error Hiding) ---
+            paymentScreenshot.addEventListener('change', function () {
+                const file = this.files[0];
+
+                // ✅ FIX 1: Start by hiding the required error
+                paymentErrorDiv.style.display = 'none';
+
+                if (file) {
+                    // Check Size
+                    if (file.size > 5 * 1024 * 1024) {
+                        paymentErrorDiv.textContent = 'File size cannot exceed 5MB';
+                        paymentErrorDiv.style.display = 'block';
+                        this.value = '';
+                        filePreview.style.display = 'none';
+                        return;
+                    }
+
+                    // Check Type
+                    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+                    if (!allowedTypes.includes(file.type)) {
+                        paymentErrorDiv.textContent = 'Only JPG, PNG, PDF files allowed';
+                        paymentErrorDiv.style.display = 'block';
+                        this.value = '';
+                        filePreview.style.display = 'none';
+                        return;
+                    }
+
+                    // Show Preview
+                    fileName.textContent = file.name;
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            previewImage.src = e.target.result;
+                            previewImage.style.display = 'block';
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        previewImage.style.display = 'none';
+                        previewImage.src = '';
+                    }
+                    filePreview.style.display = 'flex';
+                    // Error remains hidden (display: none)
+                } else {
+                    filePreview.style.display = 'none';
+                    fileName.textContent = '';
+                    previewImage.src = '';
+                    // If file is cleared, show required error again
+                    paymentErrorDiv.textContent = 'File is required';
+                    paymentErrorDiv.style.display = 'block';
+                }
+            });
+
+            // --- Form validation (FIXED: File validation check is tighter) ---
+            function validateForm() {
+                let isValid = true;
+                isValid = validateInput('teamName', /^.{3,50}$/, 'Team name must be between 3-50 characters') && isValid;
+                isValid = validateInput('leadName', /^[a-zA-Z\s]{2,50}$/, 'Please enter a valid name') && isValid;
+                isValid = validateSelect('leadBranch', 'Please select a branch') && isValid;
+                isValid = validateInput('leadCollege', null, 'Please enter college name') && isValid;
+                isValid = validateSelect('leadYear', 'Please select your year') && isValid;
+                isValid = validateInput('leadContact', /^[0-9]{10}$/, 'Enter a valid 10-digit phone number') && isValid;
+                isValid = validateInput('leadEmail', /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please enter a valid email address') && isValid;
+                for (let i = 2; i <= memberCount + 1; i++) {
+                    isValid = validateInput(`member${i}Name`, /^[a-zA-Z\s]{2,50}$/, 'Please enter a valid name') && isValid;
+                    isValid = validateSelect(`member${i}Branch`, 'Please select a branch') && isValid;
+                    isValid = validateInput(`member${i}College`, null, 'Please enter college name') && isValid;
+                    isValid = validateSelect(`member${i}Year`, 'Please select your year') && isValid;
+                    isValid = validateInput(`member${i}Contact`, /^[0-9]{10}$/, 'Enter a valid 10-digit phone number') && isValid;
+                    isValid = validateInput(`member${i}Email`, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please enter a valid email address') && isValid;
                 }
 
-                const result = await response.json();
-                registrationId = result.id;
-                
-                // Store the file object in the global state using the new ID
-                uploadedPaymentProof[registrationId] = paymentScreenshot.files[0];
+                // ✅ FIX 2: Check if file exists AND if the visible error div is hidden (meaning it passed size/type check)
+                if (!paymentScreenshot.files[0] || paymentErrorDiv.style.display === 'block') {
+                    paymentErrorDiv.textContent = paymentErrorDiv.textContent === 'File is required' ? 'File is required' : 'Invalid file size/type.';
+                    paymentErrorDiv.style.display = 'block';
+                    isValid = false;
+                } else {
+                    paymentErrorDiv.style.display = 'none'; // Ensure it's hidden if checks pass
+                }
 
-                loading.style.display = 'none';
-                
-                // Reset file input and preview after successful registration
-                paymentScreenshot.value = '';
-                filePreview.style.display = 'none';
-                fileName.textContent = '';
-                previewImage.src = '';
-                
-                showSuccessPage();
-            } catch (error) {
-                loading.style.display = 'none';
-                alert('Error submitting registration: ' + error.message);
-                console.error('Submission error:', error);
+                if (!isValid) {
+                    const firstError = document.querySelector('.error[style*="display: block"]');
+                    if (firstError) {
+                        firstError.parentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+                return isValid;
             }
+
+            // --- Submit form (UPDATED to save to MongoDB) ---
+            submitBtn.addEventListener('click', async function () {
+                if (!validateForm()) {
+                    return;
+                }
+
+                loading.style.display = 'flex';
+
+                // Collect final form data
+                formData = {
+                    teamName: document.getElementById('teamName').value.trim(),
+                    teamLead: {
+                        name: document.getElementById('leadName').value.trim(),
+                        branch: document.getElementById('leadBranch').value,
+                        college: document.getElementById('leadCollege').value.trim(),
+                        year: document.getElementById('leadYear').value,
+                        contact: document.getElementById('leadContact').value.trim(),
+                        email: document.getElementById('leadEmail').value.trim()
+                    },
+                    additionalMembers: []
+                };
+
+                for (let i = 2; i <= memberCount + 1; i++) {
+                    const memberNameElement = document.getElementById(`member${i}Name`);
+                    if (memberNameElement) {
+                        formData.additionalMembers.push({
+                            name: memberNameElement.value.trim(),
+                            branch: document.getElementById(`member${i}Branch`).value,
+                            college: document.getElementById(`member${i}College`).value.trim(),
+                            year: document.getElementById(`member${i}Year`).value,
+                            contact: document.getElementById(`member${i}Contact`).value.trim(),
+                            email: document.getElementById(`member${i}Email`).value.trim()
+                        });
+                    }
+                }
+
+                // Submit to MongoDB via API
+                try {
+                    const formDataToSend = new FormData();
+                    formDataToSend.append('formData', JSON.stringify(formData));
+                    formDataToSend.append('paymentScreenshot', paymentScreenshot.files[0]);
+
+                    const response = await fetch('https://rough-ipl-auction.onrender.com/api/registrations', {
+                        method: 'POST',
+                        body: formDataToSend
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to submit registration');
+                    }
+
+                    const result = await response.json();
+                    registrationId = result.id;
+
+                    // Store the file object in the global state using the new ID
+                    uploadedPaymentProof[registrationId] = paymentScreenshot.files[0];
+
+                    loading.style.display = 'none';
+
+                    // Reset file input and preview after successful registration
+                    paymentScreenshot.value = '';
+                    filePreview.style.display = 'none';
+                    fileName.textContent = '';
+                    previewImage.src = '';
+
+                    showSuccessPage();
+                } catch (error) {
+                    loading.style.display = 'none';
+                    alert('Error submitting registration: ' + error.message);
+                    console.error('Submission error:', error);
+                }
+            });
+
+            // Data sheet button listeners
+            viewDataBtn.addEventListener('click', renderDataSheet);
+            backToFormBtn.addEventListener('click', showForm);
+            backToDataSheetBtn.addEventListener('click', renderDataSheet);
+
+            // Initialize: Show form on load
+            showForm();
         });
-
-        // Data sheet button listeners
-        viewDataBtn.addEventListener('click', renderDataSheet);
-        backToFormBtn.addEventListener('click', showForm);
-        backToDataSheetBtn.addEventListener('click', renderDataSheet);
-
-        // Initialize: Show form on load
-        showForm();
-    });
-</script>
+    </script>
 </body>
 
 </html>
